@@ -1,6 +1,8 @@
 {
   "name": "harvesthero",
   "private": true,
+  "license": "(MIT)",
+  
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -24,4 +26,5 @@
   "dependencies": {
     "express": "^4.19.2"
   }
+  
 }
