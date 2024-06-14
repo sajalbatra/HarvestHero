@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client';
-import registrationRouter from "./routes/Donor.route.js"; 
+import allrouter from "./routes/router.route.js"; 
 const prisma = new PrismaClient();
 const app = express();
 
@@ -8,7 +8,8 @@ const app = express();
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
-app.use("/api/v1/testing", registrationRouter); // Mount your router at the specified path
+app.use("/api/v1/testing", allrouter.Donorrouter); // Mount your router at the specified path
+app.use("/api/v1/testing", allrouter.otprouter); // Mount your router at the specified path
 
 // Error handling middleware (if needed)
 app.use((err, req, res, next) => {

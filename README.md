@@ -1,81 +1,42 @@
-# Turborepo starter
+# HarvestHero
 
-This is an official starter Turborepo.
+## Overview
+HarvestHero is a platform designed to facilitate the connection between individuals, restaurants, grocery stores, and other donors with NGOs and charities. The platform aims to efficiently distribute various resources such as food, clothes, monetary donations, books, toys, medical supplies, technology, and other essentials to those in need.
 
-## Using this example
+## Purpose
+The main purpose of HarvestHero is to streamline the donation process, making it easier for donors to contribute and for NGOs and charities to receive and distribute donations effectively. By providing a centralized platform, HarvestHero enables:
 
-Run the following command:
+- **Efficient Donation Matching:** Donors can easily find NGOs and charities that are in need of specific types of donations, ensuring that resources are distributed where they are most needed.
 
-```sh
-npx create-turbo@latest
-```
+- **Enhanced Accessibility:** Individuals, restaurants, grocery stores, and other potential donors can quickly connect with organizations dedicated to helping the community, fostering a sense of community engagement and support.
 
-## What's inside?
+- **Transparency and Accountability:** The platform promotes transparency by providing clear visibility into how donations are used and distributed by NGOs and charities, building trust among donors and the community.
 
-This Turborepo includes the following packages/apps:
+- **Impact Tracking:** HarvestHero allows users to track the impact of their donations, providing insights into the difference they are making in the lives of those who benefit from their contributions.
 
-### Apps and Packages
+## Key Features
+- **User Profiles:** Donors and NGOs can create profiles detailing their donation preferences, needs, and impact stories.
+  
+- **Donation Matching:** Algorithms match donors with relevant NGOs based on donation types and geographical preferences.
+  
+- **Real-time Updates:** Notifications and updates on donation requests, distributions, and impact reports keep users informed.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- **Secure Transactions:** Built-in security measures ensure safe and reliable donation transactions.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## How to Use
+1. **Sign Up:** Create a donor or NGO profile to start donating or receiving donations.
+   
+2. **Explore Donations:** Browse through available donations or create a donation request specifying your organization's needs.
+   
+3. **Connect and Donate:** Connect with matching donors or NGOs and initiate donation transactions.
 
-### Utilities
+4. **Track Impact:** Monitor the impact of donations through real-time updates and reports.
 
-This Turborepo has some additional tools already setup for you:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
 
-### Build
+## Contributors
+- [Sajal Batra](https://github.com/sajalbatra)
 
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+ 
