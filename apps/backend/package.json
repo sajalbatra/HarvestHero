@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.ts",
+    "build": "next build",
+    "start": "node index.js",
+    "type": "module"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +30,14 @@
     "prisma": "^5.15.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "winston": "^3.13.0"
+    "winston": "^3.13.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/nodemon": "^1.19.6",
+    "bcrypt": "^5.1.1"
   }
 }

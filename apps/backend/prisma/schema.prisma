@@ -7,50 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Define the address model
-model Address {
-  id           Int      @id @default(autoincrement())
-  streetAddress String
-  city          String
-  state         String
-  postalCode    Int
-  country       String
-  donors        Donor[]  @relation("DonorAddresses")
-  ngos          Ngo[]    @relation("NGOAddresses")
-}
+// enum Organisation {
+//   RESTAURANT
+//   INDIVIDUAL
+//   GROCERY_STORE
+//   HOSPITAL
+//   SCHOOL
+//   CHURCH
+//   NON_PROFIT_ORG
+//   OTHER
+// }
 
-// Define the expanded organization enum
-enum Organisation {
-  RESTAURANT
-  INDIVIDUAL
-  GROCERY_STORE
-  HOSPITAL
-  SCHOOL
-  CHURCH
-  NON_PROFIT_ORG
-  OTHER
-}
+// enum DonationType {
+//   FOOD
+//   CLOTHES
+//   MONETARY
+//   BOOKS
+//   TOYS
+//   MEDICAL_SUPPLIES
+//   TECHNOLOGY
+//   OTHERS
+// }
 
-// Define the donation type enum
-enum DonationType {
-  FOOD
-  CLOTHES
-  MONETARY
-  BOOKS
-  TOYS
-  MEDICAL_SUPPLIES
-  TECHNOLOGY
-  OTHERS
-}
-
-// Define the role enum
 enum Role {
   USER
   ADMIN
   NGO
 }
 
-// Define various types of NGOs
 enum NGOType {
   NON_PROFIT
   CHARITY
@@ -61,39 +45,52 @@ enum NGOType {
   ENVIRONMENTAL
 }
 
-// Define the donor model
+model Address {
+  id            Int     @id @default(autoincrement())
+  streetAddress String
+  city          String
+  state         String
+  postalCode    Int
+  country       String
+  donor         Donor?
+  ngo           Ngo?
+}
+
 model Donor {
-  id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(255)
-  email        String        @unique
-  phoneNumber  String        @unique @db.VarChar(20)
-  role         Role          @default(USER)
-  addresses    Address[]     @relation("DonorAddresses")
-  affiliation  Organisation  @default(INDIVIDUAL)
-  donationType DonationType[]
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  email        String         @unique
+  password     String
+  phoneNumber  String         @unique @db.VarChar(20)
+  role         Role           @default(USER)
+  addressId    Int            @unique
+  address      Address        @relation(fields: [addressId], references: [id])
+  affiliation  String   
+  donationType String[]
 }
 
-// Define the NGO profile model
 model NGOProfile {
-  id           Int           @id @default(autoincrement())
-  logo         String
-  mission      String
-  type         NGOType
-  website      String
-  legalDoc     String
-  requirement  DonationType[]
-  ngos         Ngo[]         @relation("NGOProfile")
+  id          Int            @id @default(autoincrement())
+  logo        String
+  mission     String
+  type        NGOType
+  website     String
+  legalDoc    String
+  requirement String
+  ngo         Ngo?
 }
 
-// Define the NGO model
 model Ngo {
-  id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(255)
-  email        String        @unique
-  phoneNumber  String        @unique @db.VarChar(20)
-  role         Role          @default(USER)
-  addresses    Address[]     @relation("NGOAddresses")
-  affiliation  Organisation  @default(INDIVIDUAL)
-  donationType DonationType[]
-  ngoProfile   NGOProfile[]  @relation("NGOProfile")
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
+  email        String         @unique
+  phoneNumber  String         @unique @db.VarChar(20)
+  password     String
+  role         Role           @default(USER)
+  addressId    Int            @unique
+  address      Address        @relation(fields: [addressId], references: [id])
+  affiliation  String
+  donationType String[]
+  nGOProfileId Int            @unique
+  ngoProfile   NGOProfile     @relation(fields: [nGOProfileId], references: [id])
 }
