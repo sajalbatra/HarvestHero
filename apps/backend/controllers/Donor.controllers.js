@@ -3,6 +3,7 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendOTP, verifyOTP } from './otp.controller.js';
+import { token } from 'morgan';
 
 const prisma = new PrismaClient();
 
@@ -15,9 +16,9 @@ const addressSchema = z.object({
 });
 
 const donorSchema = z.object({
-  name: z.string().nonempty(),
+  name: z.string().min(1),
   email: z.string().email(),
-  phoneNumber: z.string().nonempty(),
+  phoneNumber: z.string().min(1),
   password: z.string().min(6), 
   address: addressSchema,
   affiliation: z.string(),
@@ -44,12 +45,10 @@ export const donor_signup = async (req, res) => {
       return res.status(500).json({ msg: 'Failed to send OTP' });
     }
 
-    const otpVerified = await verifyOTP(donor.email);
-
-    if (!otpVerified.success) {
+    const otpVerified = await verifyOTP();   
+    if (!otpVerified) {
       return res.status(401).json({ msg: otpVerified.error });
     }
-
     const newDonor = await prisma.donor.create({
       data: {
         name: donor.name,
@@ -73,9 +72,12 @@ export const donor_signup = async (req, res) => {
     const token = jwt.sign(tokenPayload, 'your_secret_key', { expiresIn: '1h' });
 
     res.setHeader('token', token);
+    console.log(token)
     res.status(201).json(newDonor);
+    
   } catch (error) {
     console.error(error);
+    console.log("error signing in ")
     res.status(500).json({ msg: 'Internal server error' });
   }
 };
@@ -89,7 +91,6 @@ const donorloginSchema = z.object({
 
 export const donor_login = async (req, res) => {
   const result = donorloginSchema.safeParse(req.body);
-
   if (!result.success) {
     return res.status(400).json({
       msg: 'Invalid data',
@@ -122,11 +123,9 @@ export const donor_login = async (req, res) => {
       return res.status(500).json({ msg: 'Failed to send OTP' });
     }
 
-    const otpVerificationResult = await verifyOTP(donor.email, req.body.otp);
-
-    if (!otpVerificationResult.success) {
-      console.log("OTP VERIFICAZATIPN NOT DONE")
-      return res.status(401).json({ msg: otpVerificationResult.error });
+    const otpVerified = await verifyOTP();   
+    if (!otpVerified) {
+      return res.status(401).json({ msg: otpVerified.error });
     }
 
     const tokenPayload = {
@@ -138,10 +137,50 @@ export const donor_login = async (req, res) => {
     const token = jwt.sign(tokenPayload, 'your_secret_key', { expiresIn: '1h' });
 
     res.setHeader('token', token);
-
+    console.log(token)
     res.status(200).json(existingDonor);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Internal server error' });
+  }
+};
+
+
+export const change_password = async (req, res) => {
+  try {
+    const token_header = req.headers.authorization.split(" ")[1];
+    const password = req.body.password;
+    
+    if (!token_header) {
+      return res.status(401).send({"msg": "The token is not found"});
+    }
+    
+    let token_verification;
+    try {
+      token_verification = jwt.verify(token_header, 'your_secret_key');
+    } catch (err) {
+      return res.status(401).send({"msg": "The token is not verified or the user is not verified"});
+    }
+    
+    const email = token_verification.email;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const find_user = await prisma.user.update({
+      where: {
+        email: email,
+        id: token_verification.id
+      },
+      data: {
+        password: hashedPassword
+      }
+    });
+    
+    if (!find_user) {
+      return res.status(404).send({"msg": "The user is not found"});
+    }
+    
+    res.send({"msg": "The password successfully changed"});
+  } catch (error) {
+    res.status(500).send({"msg": "Internal server error"});
   }
 };

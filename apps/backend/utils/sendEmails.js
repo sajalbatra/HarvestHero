@@ -14,7 +14,7 @@ export default async function sendEmail(options) {
             },
             authMethod: 'LOGIN', // Specify the authentication method if required
         });
-        console.log(process.env.SMPT_MAIL +" "+ process.env.SMPT_APP_PASS)
+        // console.log(process.env.SMPT_MAIL +" "+ process.env.SMPT_APP_PASS)
         const mailOptions = {
             from: process.env.SMPT_MAIL,
             to: options.to,

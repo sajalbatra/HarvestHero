@@ -37,31 +37,39 @@ export const sendOTP = async (toemail) => {
     }
 };
 
-export const verifyOTP = async (req, res) => {
-    const { email } = req.query; 
-    const { otp } = req.body;    
+export const verifyOTP = async (req,res) => {
+        const email = req.query.email; 
+        const otp = req.body.otp; 
 
-    try {
-        const existingOTP = await prisma.OTP.findFirst({
-            where: {
-                email: email, 
-                otp: otp      
-            }
-        });
+        console.log('email:', email);
+        console.log('req.body:', req.body);
 
-        if (!existingOTP) {
-            return res.status(401).json({ success: false, error: 'Invalid OTP' });
+        if (!email || !otp) {
+            return res.status(400).json({ success: false, error: 'Email and OTP are required' });
         }
 
-        await prisma.OTP.delete({
-            where: {
-                id: existingOTP.id
-            }
-        });
+        try {
+            const existingOTP = await prisma.OTP.findFirst({
+                where: {
+                    email: email,
+                    otp: otp
+                }
+            });
 
-        return res.status(200).json({ success: true });
-    } catch (error) {
-        console.error('Error verifying OTP:', error);
-        return res.status(500).json({ success: false, error: 'Internal server error' });
-    }
-};
+            if (!existingOTP) {
+                return res.status(401).json({ success: false, error: 'Invalid OTP' });
+            }
+
+            await prisma.OTP.delete({
+                where: {
+                    id: existingOTP.id
+                }
+            });
+
+            return true;
+        } catch (error) {
+            console.error('Error verifying OTP:', error);
+            return false;
+        }
+    };
+
