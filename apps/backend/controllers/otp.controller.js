@@ -4,7 +4,6 @@ import sendEmail from '../utils/sendEmails.js';
 
 const prisma = new PrismaClient();
 
-// Generate OTP
 function generateOTP() {
     return randomstring.generate({
         length: 6,
@@ -12,69 +11,57 @@ function generateOTP() {
     });
 }
 
-// Send OTP to the provided email
-export const sendOTP = async (req, res) => {
+export const sendOTP = async (toemail) => {
     try {
-        const { email } = req.query;
-        const otp = generateOTP(); // Generate a 6-digit OTP
-
-        // Save OTP to database
+        const otp = generateOTP();
         await prisma.OTP.create({
             data: {
-                email: email,
-                otp: otp
+                email: toemail,
+                otp: otp,
+                createdAt: new Date() 
             }
         });
 
         console.log("The OTP is:", otp);
 
-        // Send OTP via email
         await sendEmail({
-            to: email,
+            to: toemail,
             subject: 'Your OTP',
             message: `<p>Your OTP is: <strong>${otp}</strong></p>`,
         });
 
-        res.status(200).json({ success: true, message: 'OTP sent successfully' });
+        return true;
     } catch (error) {
         console.error('Error sending OTP:', error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
+        return false;
     }
 };
 
-// Verify OTP provided by the user
 export const verifyOTP = async (req, res) => {
-    try {
-        const { email } = req.query;
-        const { otp } = req.body;
+    const { email } = req.query; 
+    const { otp } = req.body;    
 
-        // Find and delete OTP if it matches
+    try {
         const existingOTP = await prisma.OTP.findFirst({
             where: {
-                email: email,
-                otp: otp
+                email: email, 
+                otp: otp      
             }
         });
 
-        if (existingOTP) {
-            // OTP is valid
-            await prisma.OTP.delete({
-                where: {
-                    id: existingOTP.id
-                }
-            });
-            res.status(200).json({ success: true, message: 'OTP verification successful' });
-        } else {
-            // OTP is invalid
-            res.status(400).json({ success: false, error: 'Invalid OTP' });
+        if (!existingOTP) {
+            return res.status(401).json({ success: false, error: 'Invalid OTP' });
         }
+
+        await prisma.OTP.delete({
+            where: {
+                id: existingOTP.id
+            }
+        });
+
+        return res.status(200).json({ success: true });
     } catch (error) {
         console.error('Error verifying OTP:', error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
+        return res.status(500).json({ success: false, error: 'Internal server error' });
     }
-};
-
-export default {
-    sendOTP,
-    verifyOTP
 };

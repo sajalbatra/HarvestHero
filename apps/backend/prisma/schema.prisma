@@ -94,8 +94,9 @@ model Ngo {
   nGOProfileId Int            @unique
   ngoProfile   NGOProfile     @relation(fields: [nGOProfileId], references: [id])
 }
-model OTP{
-  id           Int            @id @default(autoincrement())
-  email String 
-  otp String
+model OTP {
+  id        Int      @id @default(autoincrement())
+  email     String
+  otp       String
+  createdAt DateTime @default(now()) @db.Timestamptz
 }
