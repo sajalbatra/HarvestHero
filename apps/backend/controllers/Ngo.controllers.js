@@ -20,78 +20,25 @@ const addressSchema = z.object({
   country: z.string(),
 });
 
-const donorSchema = z.object({
+const NgoSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
   phoneNumber: z.string().min(1),
   password: z.string().min(6), 
   address: addressSchema,
   affiliation: z.string(),
-  donationType: z.array(z.any())
+  donationType: z.array(z.any()),
+  logo:z.string(),
+  mission:z.string(),
+  type:z.string(),
+  website:z.string(),
+  legalDoc:z.string(),
+  requirement:z.string(),
 });
 
-// export const donor_signup = async (req, res) => {
-//   const result = donorSchema.safeParse(req.body);
 
-//   if (!result.success) {
-//     return res.status(400).json({
-//       msg: 'Invalid data',
-//       errors: result.error.errors
-//     });
-//   }
-
-//   const donor = result.data;
-
-//   try {
-//     const hashedPassword = await bcrypt.hash(donor.password, 10);
-//     const otpSent = await sendOTP(donor.email);
-
-//     if (!otpSent) {
-//       return res.status(500).json({ msg: 'Failed to send OTP' });
-//     }
-
-//     const otpVerified = await verifyOTP();   
-//     if (!otpVerified) {
-//       return res.status(401).json({ msg: otpVerified.error });
-//     }
-//     const newDonor = await prisma.donor.create({
-//       data: {
-//         name: donor.name,
-//         email: donor.email,
-//         phoneNumber: donor.phoneNumber,
-//         password: hashedPassword,
-//         affiliation: donor.affiliation,
-//         donationType: donor.donationType,
-//         address: {
-//           create: donor.address
-//         }
-//       },
-//     });
-
-//     const tokenPayload = {
-//       id: newDonor.id,
-//       name: newDonor.name,
-//       email: newDonor.email,
-//       role: newDonor.role,
-//     };
-//     const token = jwt.sign(tokenPayload, 'your_secret_key', { expiresIn: '1h' });
-
-//     res.setHeader('token', token);
-//     console.log(token)
-//     res.status(201).json(newDonor);
-    
-//   } catch (error) {
-//     console.error(error);
-//     console.log("error signing in ")
-//     res.status(500).json({ msg: 'Internal server error' });
-//   }
-// };
-
-// -----------------------------------------------
-
-
-export const donor_signup = async (req, res) => {
-  const result = donorSchema.safeParse(req.body);
+export const Ngo_signup = async (req, res) => {
+  const result = NgoSchema.safeParse(req.body);
 
   if (!result.success) {
     return res.status(400).json({
@@ -100,19 +47,19 @@ export const donor_signup = async (req, res) => {
     });
   }
 
-  const donor = result.data;
+  const Ngo = result.data;
 
   try {
-    const otpSent = await sendOTP(donor.email);
+    const otpSent = await sendOTP(Ngo.email);
 
     if (!otpSent) {
       return res.status(500).json({ msg: 'Failed to send OTP' });
     }
 
     const redisResponse = await client.set(
-      donor.email,
+      Ngo.email,
       JSON.stringify({
-        ...donor,
+        ...Ngo,
       }),
       'EX',
       3600  // Expiration time in seconds
@@ -163,43 +110,49 @@ export const verify_otp = async (req, res) => {
       return res.status(401).json({ msg: 'OTP verification failed' });
     }
 
-    // const donor = JSON.stringify(await client.get(email));
-    const storedDonor = JSON.parse(await client.get(email));
+    // const Ngo = JSON.stringify(await client.get(email));
+    const storedNgo = JSON.parse(await client.get(email));
 
-    if (!storedDonor) {
-      return res.status(500).json({ msg: 'Failed to retrieve stored donor data' });
+    if (!storedNgo) {
+      return res.status(500).json({ msg: 'Failed to retrieve stored Ngo data' });
     }
 
-    const hashedPassword = await bcrypt.hash(storedDonor.password, 10);
+    const hashedPassword = await bcrypt.hash(storedNgo.password, 10);
 
-    const newDonor = await prisma.donor.create({
+    const newNgo = await prisma.Ngo.create({
       data: {
-        name: storedDonor.name,
-        email: storedDonor.email,
-        phoneNumber: storedDonor.phoneNumber,
+        name: storedNgo.name,
+        email: storedNgo.email,
+        phoneNumber: storedNgo.phoneNumber,
         password: hashedPassword, // Store hashed password in main database
-        affiliation: storedDonor.affiliation,
-        donationType: storedDonor.donationType,
+        affiliation: storedNgo.affiliation,
+        donationType: storedNgo.donationType,
         address: {
-          create: storedDonor.address,
+          create: storedNgo.address,
         },
+        logo:storedNgo.logo, 
+        mission:storedNgo.mission,     
+        type:storedNgo.type,         
+        website:storedNgo.website,     
+        legalDoc:storedNgo.legalDoc,    
+        requirement:storedNgo.requirement, 
       },
     });
 
-    // Delete donor data from Redis after successful registration
+    // Delete Ngo data from Redis after successful registration
     await client.del(email);
 
     const tokenPayload = {
-      id: newDonor.id,
-      name: newDonor.name,
-      email: newDonor.email,
-      role: newDonor.role,
+      id: newNgo.id,
+      name: newNgo.name,
+      email: newNgo.email,
+      role: newNgo.role,
     };
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
     res.setHeader('token', token);
     console.log(token)
-    return res.status(201).json(newDonor);
+    return res.status(201).json(newNgo);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
@@ -207,13 +160,13 @@ export const verify_otp = async (req, res) => {
 };
 
 
-const donorloginSchema = z.object({
+const NgologinSchema = z.object({
   email: z.string().email(),
   password: z.string().min(6), 
 });
 
-export const donor_login = async (req, res) => {
-  const result = donorloginSchema.safeParse(req.body);
+export const Ngo_login = async (req, res) => {
+  const result = NgologinSchema.safeParse(req.body);
   if (!result.success) {
     return res.status(400).json({
       msg: 'Invalid data',
@@ -221,36 +174,36 @@ export const donor_login = async (req, res) => {
     });
   }
 
-  const donor = result.data;
+  const Ngo = result.data;
 
   try {
-    const existingDonor = await prisma.donor.findUnique({
+    const existingNgo = await prisma.Ngo.findUnique({
       where: {
-        email: donor.email
+        email: Ngo.email
       }
     });
 
-    if (!existingDonor) {
-      return res.status(404).json({ msg: 'Donor not found' });
+    if (!existingNgo) {
+      return res.status(404).json({ msg: 'Ngo not found' });
     }
 
-    const passwordMatch = await bcrypt.compare(donor.password, existingDonor.password);
+    const passwordMatch = await bcrypt.compare(Ngo.password, existingNgo.password);
 
     if (!passwordMatch) {
       return res.status(401).json({ msg: 'Invalid credentials' });
     }
     
     const tokenPayload = {
-      id: existingDonor.id,
-      email: existingDonor.email,
-      role: existingDonor.role,
+      id: existingNgo.id,
+      email: existingNgo.email,
+      role: existingNgo.role,
     };
 
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
     res.setHeader('token', token);
     console.log(token)
-    res.status(200).json(existingDonor);
+    res.status(200).json(existingNgo);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Internal server error' });
@@ -275,7 +228,7 @@ export const change_password = async (req, res) => {
     const useremail = token_verification.email;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const find_user = await prisma.donor.update({
+    const find_user = await prisma.Ngo.update({
       where: {
         email: useremail,
       },

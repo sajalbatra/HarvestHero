@@ -9,6 +9,7 @@ app.use(express.json()); // Parse JSON bodies
 
 // Routes
 app.use("/api/v1/testing/donor", allrouter.Donorrouter); // Mount your router at the specified path
+app.use("/api/v1/testing/ngo", allrouter.Ngorouter); // Mount your router at the specified path
 app.use("/api/v1/testing", allrouter.otprouter); // Mount your router at the specified path
 
 // Error handling middleware (if needed)
