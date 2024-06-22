@@ -3,11 +3,13 @@ import { PrismaClient } from '@prisma/client';
 import allrouter from "./routes/router.route.js"; 
 const prisma = new PrismaClient();
 const app = express();
-
+import cors from "cors"
 // Middleware
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors({
+  origin: "*"
+}));
 // Routes
 app.use("/api/v1/testing/donor", allrouter.Donorrouter); // Mount your router at the specified path
 app.use("/api/v1/testing/ngo", allrouter.Ngorouter); // Mount your router at the specified path
