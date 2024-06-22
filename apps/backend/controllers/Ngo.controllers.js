@@ -20,6 +20,15 @@ const addressSchema = z.object({
   country: z.string(),
 });
 
+const Ngo_profile=z.object({
+  logo:z.string(),
+  mission:z.string(),
+  type:z.string(),
+  website:z.string(),
+  legalDoc:z.string(),
+  requirement:z.string(),
+})
+
 const NgoSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
@@ -28,12 +37,8 @@ const NgoSchema = z.object({
   address: addressSchema,
   affiliation: z.string(),
   donationType: z.array(z.any()),
-  logo:z.string(),
-  mission:z.string(),
-  type:z.string(),
-  website:z.string(),
-  legalDoc:z.string(),
-  requirement:z.string(),
+  ngoProfile:Ngo_profile
+  
 });
 
 
@@ -130,12 +135,9 @@ export const verify_otp = async (req, res) => {
         address: {
           create: storedNgo.address,
         },
-        logo:storedNgo.logo, 
-        mission:storedNgo.mission,     
-        type:storedNgo.type,         
-        website:storedNgo.website,     
-        legalDoc:storedNgo.legalDoc,    
-        requirement:storedNgo.requirement, 
+        ngoProfile:{
+          create: storedNgo.ngoProfile
+        } 
       },
     });
 
@@ -246,7 +248,6 @@ export const change_password = async (req, res) => {
     res.status(500).send({"msg": "Internal server error"});
   }
 };
-
 
 
 

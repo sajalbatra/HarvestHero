@@ -6,6 +6,7 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/v1/testing/donor", allrouter.Donorrouter); // Mount your router at the specified path

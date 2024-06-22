@@ -4,6 +4,16 @@ module.exports = {
   extends: ["@repo/eslint-config/next.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: true,
+    project: "./tsconfig.json", // Make sure this path is correct
   },
+  ignorePatterns: ["postcss.config.js"],
+  overrides: [
+    {
+      files: ["*.js"],
+      excludedFiles: ["tailwind.config.js"],
+      rules: {
+        // your JavaScript-specific rules
+      }
+    }
+  ]
 };

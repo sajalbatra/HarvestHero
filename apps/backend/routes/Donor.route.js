@@ -5,7 +5,7 @@ const router = Router();
 
 router.post('/signup', donor_signup);
 router.post('/login', donor_login);
-router.post('/passwrod_change', change_password);
+router.post('/password_change', change_password);
 router.post('/verify_otp', verify_otp);
 
 

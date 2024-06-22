@@ -69,16 +69,16 @@ model Donor {
   donationType String[]
 }
 
-// model NGOProfile {
-//   id          Int            @id @default(autoincrement())
-//   logo        String
-//   mission     String
-//   type        NGOType
-//   website     String
-//   legalDoc    String
-//   requirement String
-//   ngo         Ngo?
-// }
+model NGOProfile {
+  id          Int            @id @default(autoincrement())
+  logo        String
+  mission     String
+  type        NGOType
+  website     String
+  legalDoc    String
+  requirement String
+  ngo         Ngo?
+}
 
 model Ngo {
   id           Int            @id @default(autoincrement())
@@ -91,14 +91,14 @@ model Ngo {
   address      Address        @relation(fields: [addressId], references: [id])
   affiliation  String
   donationType String[]      
-  // nGOProfileId Int            @unique
-  // ngoProfile   NGOProfile     @relation(fields: [nGOProfileId], references: [id])
-  logo        String
-  mission     String
-  type        NGOType
-  website     String
-  legalDoc    String
-  requirement String
+  nGOProfileId Int            @unique
+  ngoProfile   NGOProfile     @relation(fields: [nGOProfileId], references: [id])
+  // logo        String
+  // mission     String
+  // type        NGOType
+  // website     String
+  // legalDoc    String
+  // requirement String
 }
 model OTP {
   id        Int      @id @default(autoincrement())

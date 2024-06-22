@@ -8,6 +8,8 @@
     ]
   },
   "include": [
+    "src", "tailwind.config.js",
+"src", "postcss.config.js",
     "next-env.d.ts",
     "next.config.js",
     "**/*.ts",
