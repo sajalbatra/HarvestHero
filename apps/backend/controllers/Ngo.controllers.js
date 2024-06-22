@@ -42,6 +42,7 @@ const NgoSchema = z.object({
 
 
 export const Ngo_signup = async (req, res) => {
+  console.log(req.body)
   const result = NgoSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -55,7 +56,7 @@ export const Ngo_signup = async (req, res) => {
   Ngo.ngoProfile.logo = req.logoUrl;
   Ngo.ngoProfile.legalDoc = req.legaldocUrl;
 
-  console.log(Ngo.address.postalCode)
+  //console.log(Ngo.address.postalCode)
   Ngo.address.postalCode=parseInt(Ngo.address.postalCode)
 
   try {
@@ -180,7 +181,6 @@ export const Ngo_login = async (req, res) => {
   }
 
   const Ngo = result.data;
-
   try {
     const existingNgo = await prisma.Ngo.findUnique({
       where: {
@@ -206,9 +206,10 @@ export const Ngo_login = async (req, res) => {
 
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
-    res.setHeader('token', token);
-    console.log(token)
+    res.setHeader('Authorization', `Bearer ${token}`);
+    //console.log(token)
     res.status(200).json(existingNgo);
+    console.log("Login Successfull")
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Internal server error' });

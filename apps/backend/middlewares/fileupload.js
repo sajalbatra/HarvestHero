@@ -61,7 +61,7 @@ export const handleFileUpload = async (req, res, next) => {
       }
 
       // Check if the 'logo' field was uploaded
-      if (!req.files['logo'] || req.files['logo'].length === 0) {
+      if (!req.files || !req.files['logo'] || req.files['logo'].length === 0) {
         return res.status(400).json({ message: 'No file uploaded for logo' });
       }
 
