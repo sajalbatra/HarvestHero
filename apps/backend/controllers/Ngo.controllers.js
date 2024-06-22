@@ -5,27 +5,26 @@ import jwt from 'jsonwebtoken';
 import { sendOTP, verifyOTP } from './otp.controller.js';
 import 'dotenv/config';
 import Redis  from "ioredis";
-
 const redis_url=process.env.Redis_url
 const client = new Redis(redis_url);
 const your_secret_key=process.env.Secret_Key
-
+// import {handleFileUpload} from "../utils/fileupload.js"
 const prisma = new PrismaClient();
 
 const addressSchema = z.object({
   streetAddress: z.string(),
   city: z.string(),
   state: z.string(),
-  postalCode: z.number(),
+  postalCode: z.string(),
   country: z.string(),
 });
 
 const Ngo_profile=z.object({
-  logo:z.string(),
+  //logo:z.null,
   mission:z.string(),
   type:z.string(),
   website:z.string(),
-  legalDoc:z.string(),
+  //legalDoc:z.null,
   requirement:z.string(),
 })
 
@@ -53,6 +52,11 @@ export const Ngo_signup = async (req, res) => {
   }
 
   const Ngo = result.data;
+  Ngo.ngoProfile.logo = req.logoUrl;
+  Ngo.ngoProfile.legalDoc = req.legaldocUrl;
+
+  console.log(Ngo.address.postalCode)
+  Ngo.address.postalCode=parseInt(Ngo.address.postalCode)
 
   try {
     const otpSent = await sendOTP(Ngo.email);
@@ -153,14 +157,13 @@ export const verify_otp = async (req, res) => {
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
     res.setHeader('token', token);
-    console.log(token)
+    //console.log(token)
     return res.status(201).json(newNgo);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
   }
 };
-
 
 const NgologinSchema = z.object({
   email: z.string().email(),

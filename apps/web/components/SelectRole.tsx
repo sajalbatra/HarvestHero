@@ -6,59 +6,129 @@ const SelectRole: React.FC = () => {
   const [ngostate, setNgostate] = useState<string>("");
   const [donorstate, setDonorstate] = useState<string>("");
 
-  const handleNGOSignUp = (event: React.FormEvent<HTMLFormElement>) => {
+//   const handleNGOSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+//     event.preventDefault();
+//     const formData = new FormData(event.currentTarget);
+
+//     // Construct the nested address and ngoProfile objects from formData
+//     const address = {
+//         streetAddress: formData.get("streetAddress") as string,
+//         city: formData.get("city") as string,
+//         state: formData.get("state") as string,
+//         postalCode: Number(formData.get("postalCode")),
+//         country: formData.get("country") as string,
+//     };
+
+//     const ngoProfile = {
+//         logo: formData.get("logo") as File,
+//         mission: formData.get("mission") as string,
+//         type: formData.get("type") as string,
+//         website: formData.get("website") as string,
+//         legalDoc: formData.get("legalDoc") as File,
+//         requirement: formData.get("requirement") as string,
+//     };
+
+//     const signUpData = {
+//         name: formData.get("name") as string,
+//         email: formData.get("email") as string,
+//         phoneNumber: formData.get("phoneNumber") as string,
+//         password: formData.get("password") as string,
+//         address,
+//         affiliation: formData.get("affiliation") as string,
+//         donationType: formData.get("donationType")?.toString().split(",") || [],
+//         ngoProfile,
+//     };
+
+//     try {
+//         const response = await axios.post(`${Web_Url}/ngo/signup`, signUpData, {
+//           headers: {
+//             'Content-Type': 'multipart/form-data'
+//         }
+//         });
+//         console.log("NGO Sign Up successful:", response.data);
+//     } catch (error) {
+//         console.error("NGO Sign Up failed:", error);
+//         if (axios.isAxiosError(error)) {
+//             console.error("Error response:", error.response?.data);
+//             console.error("Error config:", error.config);
+//         }
+//     }
+// };
+
+
+const handleNGOSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    
+    const formData = new FormData(event.currentTarget);
+    formData.append('logo', event.currentTarget.logo.files[0]);
+    formData.append('legalDoc', event.currentTarget.legalDoc.files[0]);
+
+    try {
+        const response = await axios.post('http://localhost:3000/api/v1/testing/ngo/signup', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+        console.log('NGO Sign Up successful:', response.data);
+    } catch (error) {
+        console.error('NGO Sign Up failed:', error);
+        if (axios.isAxiosError(error)) {
+            console.error('Error response:', error.response?.data);
+            console.error('Error config:', error.config);
+        }
+    }
+};
+
+  const handleDonorSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const ngoFormData = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
-      address: {
-        streetAddress: formData.get("streetAddress") as string,
-        city: formData.get("city") as string,
-        state: formData.get("state") as string,
-        postalCode: parseInt(formData.get("postalCode") as string),
-        country: formData.get("country") as string,
-      },
-      ngoProfile: {
-        mission: formData.get("mission") as string,
-        logo: formData.get("logo") as File,
-        type: formData.get("type") as string,
-        legalDoc: formData.get("legalDoc") as File,
-        requirement: formData.get("requirement") as string,
-      },
-    };
 
-    axios
-      .post(`${Web_Url}/ngo/signup`, ngoFormData)
-      .then((response) => {
-        console.log("NGO Sign Up successful:", response.data);
-        // Optionally handle success response here
-      })
-      .catch((error) => {
-        console.error("NGO Sign Up failed:", error);
-        // Optionally handle error response here
+    // Debug: Print formData content
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
+    try {
+      const response = await axios.post(`${Web_Url}/donor/signup`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+      console.log("Donor Sign Up successful:", response.data);
+    } catch (error) {
+      console.error("Donor Sign Up failed:", error);
+      if (axios.isAxiosError(error)) {
+        console.error("Error response:", error.response);
+        console.error("Error config:", error.config);
+      }
+    }
   };
 
-  const handleDonorSignUp = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleNGOLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Donor Sign Up form submitted");
-    // Add logic to handle Donor Sign Up form submission
+    const loginData = new FormData(event.currentTarget);
+
+    try {
+      const response = await axios.post(`${Web_Url}/ngo/login`, loginData);
+      console.log("NGO Login successful:", response.data);
+    } catch (error) {
+      console.error("NGO Login failed:", error);
+    }
   };
 
-  const handleNGOLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleDonorLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("NGO Login form submitted");
-    // Add logic to handle NGO Login form submission
+    const loginData = new FormData(event.currentTarget);
+
+    try {
+      const response = await axios.post(`${Web_Url}/donor/login`, loginData);
+      console.log("Donor Login successful:", response.data);
+    } catch (error) {
+      console.error("Donor Login failed:", error);
+    }
   };
 
-  const handleDonorLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("Donor Login form submitted");
-    // Add logic to handle Donor Login form submission
-  };
 
   return (
     <>
@@ -237,6 +307,30 @@ const SelectRole: React.FC = () => {
               />
             </div>
             <div className="mb-4">
+              <label htmlFor="ngo-country" className="block mb-2 text-sm font-bold text-gray-700">
+                Affiliation:
+              </label>
+              <input
+                id="ngo-affiliation"
+                name="affiliation"
+                type="text"
+                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="ngo-country" className="block mb-2 text-sm font-bold text-gray-700">
+                Donation Type:
+              </label>
+              <input
+                id="ngo-donationtype"
+                name="donationtype"
+                type="text"
+                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+            <div className="mb-4">
               <label htmlFor="ngo-mission" className="block mb-2 text-sm font-bold text-gray-700">
                 Mission:
               </label>
@@ -289,6 +383,18 @@ const SelectRole: React.FC = () => {
                 id="ngo-legalDoc"
                 name="legalDoc"
                 type="file"
+                className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="ngo-legalDoc" className="block mb-2 text-sm font-bold text-gray-700">
+                website:
+              </label>
+              <input
+                id="ngo-website"
+                name="website"
+                type="text"
                 className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                 required
               />
