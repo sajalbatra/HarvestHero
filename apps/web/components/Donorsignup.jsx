@@ -1,11 +1,11 @@
 'use client'
- 
 import { useRouter } from 'next/navigation'
- import axios from "axios";
+import axios from "axios";
 import React, { useState } from "react";
 import { WEB_URL } from "../public/constants";
-import {notifyError, notifySuccess} from '../services/Notification'
+import { notifyError, notifySuccess } from '../services/Notification'
 import Notification from '../services/Notification'
+const Web_url = WEB_URL
 
 const Donorsignup = () => {
   // State variables for form inputs
@@ -25,8 +25,8 @@ const Donorsignup = () => {
 
   // Handle form submission
   const handleDonorSignUp = async (event) => {
-  event.preventDefault();
-  const parsedPostalCode = parseInt(postalCode, 10); // Convert to base 10 integer
+    event.preventDefault();
+    const parsedPostalCode = parseInt(postalCode, 10); // Convert to base 10 integer
 
     // Validate data
     const formData = {
@@ -46,20 +46,21 @@ const Donorsignup = () => {
     };
 
     try {
-      const response = await axios.post(`${WEB_URL}/donor/signup`, formData);
-      console.log("Donor Sign Up successful:", response.data);
+      const response = await axios.post(`${Web_url}/donor/signup`, formData)
+      //console.log("Donor Sign Up successful:", response.data);
       notifySuccess("OTP Send to Email")
       setTimeout(()=>{
-        router.push(`/verifyotp/donor?email=${email}`)
+      router.push(`/verifyotp/donor?email=${email}`)
       },3000)
-    } catch (error) {
-      notifyError("Error in sending OTP")
-    }
+  } catch (error) {
+      console.log(error)            
+      notifyError("Error in sending OTP")            
+  }
   };
 
   return (
     <div className="flex items-center justify-center w-full bg-gray-100">
-      <Notification/>
+      <Notification />
       <form
         onSubmit={handleDonorSignUp}
         className="max-w-md px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md"

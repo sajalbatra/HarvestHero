@@ -156,9 +156,9 @@ export const verify_otp = async (req, res) => {
     };
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
-    res.setHeader('token', token);
+    res.setHeader('Authorization', 'Bearer ' + token);
     //console.log(token)
-    return res.status(201).json(newNgo);
+    return res.status(201).json({token,newNgo});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
@@ -205,9 +205,9 @@ export const Ngo_login = async (req, res) => {
 
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
-    res.setHeader('Authorization', `Bearer ${token}`);
+    res.setHeader('Authorization', 'Bearer ' + token);
     //console.log(token)
-    res.status(200).json(existingNgo);
+    res.status(200).json({token,existingNgo});
     console.log("Login Successfull")
   } catch (error) {
     console.error(error);
@@ -244,13 +244,18 @@ export const change_password = async (req, res) => {
     if (!find_user) {
       return res.status(404).send({"msg": "The user is not found"});
     }
-    
+    const jwtpayload={
+      email:email,
+      password:hashedPassword,
+      role:token_verification.role
+
+    }
+    const token = jwt.sign(jwtpayload, your_secret_key, { expiresIn: '1h' });
+    res.setHeader('Authorization', 'Bearer ' + token);
+    res.status(201).json({token});
     res.send({"msg": "The password successfully changed"});
   } catch (error) {
     console.error(error);
     res.status(500).send({"msg": "Internal server error"});
   }
 };
-
-
-

@@ -1,9 +1,11 @@
+'use client'
 import axios from "axios";
 import React, { useState } from "react";
-import {WEB_URL} from "../public/constants"
-
-const Web_url=WEB_URL
-
+import { WEB_URL } from "../public/constants"
+import { notifyError, notifySuccess } from '../services/Notification'
+import Notification from '../services/Notification'
+const Web_url = WEB_URL
+import { useRouter } from "next/router";
 const Ngosignup = () => {
     // State variables to hold form data
     const [name, setName] = useState("");
@@ -25,43 +27,43 @@ const Ngosignup = () => {
     const [legalDoc, setLegalDoc] = useState(null);
 
     const handleNGOSignUp = async (event) => {
+        const router = useRouter()
         event.preventDefault();
-    const sendData = new FormData();
-    sendData.append("name", name);
-    sendData.append("email", email);
-    sendData.append("phoneNumber", phoneNumber);
-    sendData.append("password", password);
-    sendData.append("address.streetAddress", streetAddress);
-    sendData.append("address.city", city);
-    sendData.append("address.state", state);
-    sendData.append("address.postalCode", postalCode);
-    sendData.append("address.country", country);
-    sendData.append("affiliation", affiliation);
-    sendData.append("donationType", donationType);
-    sendData.append("ngoProfile.mission", mission);
-    sendData.append("ngoProfile.type", type);
-    sendData.append("ngoProfile.website", website);
-    sendData.append("ngoProfile.requirement", requirement);
-    sendData.append("type", type);
-    sendData.append("logo", logo); 
-    sendData.append("legalDoc", legalDoc); 
+        const sendData = new FormData();
+        sendData.append("name", name);
+        sendData.append("email", email);
+        sendData.append("phoneNumber", phoneNumber);
+        sendData.append("password", password);
+        sendData.append("address.streetAddress", streetAddress);
+        sendData.append("address.city", city);
+        sendData.append("address.state", state);
+        sendData.append("address.postalCode", postalCode);
+        sendData.append("address.country", country);
+        sendData.append("affiliation", affiliation);
+        sendData.append("donationType", donationType);
+        sendData.append("ngoProfile.mission", mission);
+        sendData.append("ngoProfile.type", type);
+        sendData.append("ngoProfile.website", website);
+        sendData.append("ngoProfile.requirement", requirement);
+        sendData.append("type", type);
+        sendData.append("logo", logo);
+        sendData.append("legalDoc", legalDoc);
         try {
             const response = await axios.post(`${Web_url}/ngo/signup`, sendData)
-            console.log("NGO Sign Up successful:", response.data);
-        } catch (error) {
-            if (error.response) {
-                console.error('Response error:', error.response.data);
-              } else if (error.request) {
-                console.error('Request error:', error.request);
-              } else {
-                console.error('Error:', error.message);
-              }
-              throw error;
+            //console.log("NGO Sign Up successful:", response.data);
+            notifySuccess("OTP Send to Email")
+            setTimeout(()=>{
+            router.push(`/verifyotp/ngo?email=${email}`)
+            },3000)
+        } catch (error) {            
+            notifyError("Error in sending OTP")            
         }
+
     };
 
     return (
         <div className="flex items-center justify-center bg-gray-100">
+            <Notification />
             <form onSubmit={handleNGOSignUp} className="max-w-md px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
                 <div className="mb-4">
                     <label htmlFor="ngo-name" className="block mb-2 text-sm font-bold text-gray-700">
@@ -271,7 +273,7 @@ const Ngosignup = () => {
                     onChange={(e) => setLegalDoc(e.target.files && e.target.files[0])}
                     className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                     required
-/>
+                />
 
                 <div className="mb-4">
                     <label htmlFor="ngo-website" className="block mb-2 text-sm font-bold text-gray-700">

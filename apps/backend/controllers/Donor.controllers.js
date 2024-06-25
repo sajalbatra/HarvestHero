@@ -30,66 +30,6 @@ const donorSchema = z.object({
   donationType: z.array(z.any())
 });
 
-// export const donor_signup = async (req, res) => {
-//   const result = donorSchema.safeParse(req.body);
-
-//   if (!result.success) {
-//     return res.status(400).json({
-//       msg: 'Invalid data',
-//       errors: result.error.errors
-//     });
-//   }
-
-//   const donor = result.data;
-
-//   try {
-//     const hashedPassword = await bcrypt.hash(donor.password, 10);
-//     const otpSent = await sendOTP(donor.email);
-
-//     if (!otpSent) {
-//       return res.status(500).json({ msg: 'Failed to send OTP' });
-//     }
-
-//     const otpVerified = await verifyOTP();   
-//     if (!otpVerified) {
-//       return res.status(401).json({ msg: otpVerified.error });
-//     }
-//     const newDonor = await prisma.donor.create({
-//       data: {
-//         name: donor.name,
-//         email: donor.email,
-//         phoneNumber: donor.phoneNumber,
-//         password: hashedPassword,
-//         affiliation: donor.affiliation,
-//         donationType: donor.donationType,
-//         address: {
-//           create: donor.address
-//         }
-//       },
-//     });
-
-//     const tokenPayload = {
-//       id: newDonor.id,
-//       name: newDonor.name,
-//       email: newDonor.email,
-//       role: newDonor.role,
-//     };
-//     const token = jwt.sign(tokenPayload, 'your_secret_key', { expiresIn: '1h' });
-
-//     res.setHeader('token', token);
-//     console.log(token)
-//     res.status(201).json(newDonor);
-    
-//   } catch (error) {
-//     console.error(error);
-//     console.log("error signing in ")
-//     res.status(500).json({ msg: 'Internal server error' });
-//   }
-// };
-
-// -----------------------------------------------
-
-
 export const donor_signup = async (req, res) => {
   const result = donorSchema.safeParse(req.body);
 
@@ -119,7 +59,7 @@ export const donor_signup = async (req, res) => {
     );
 
     console.log(redisResponse); // Optional: Logging the Redis response
-    return res.status(200).json({ msg: 'OTP sent successfully' });
+    return res.status(201).json({ msg: 'OTP sent successfully' });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
@@ -250,7 +190,7 @@ export const donor_login = async (req, res) => {
 
     res.setHeader('Authorization', 'Bearer ' + token);
     console.log(token)
-    return res.status(201).json({ token, existingDonor });
+    return res.status(200).json({ token, existingDonor });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Internal server error' });
@@ -286,7 +226,15 @@ export const change_password = async (req, res) => {
     if (!find_user) {
       return res.status(404).send({"msg": "The user is not found"});
     }
-    
+    const jwtpayload={
+      email:email,
+      password:hashedPassword,
+      role:token_verification.role
+
+    }
+    const token = jwt.sign(jwtpayload, your_secret_key, { expiresIn: '1h' });
+    res.setHeader('Authorization', 'Bearer ' + token);
+    res.status(201).json({token});
     res.send({"msg": "The password successfully changed"});
   } catch (error) {
     console.error(error);
