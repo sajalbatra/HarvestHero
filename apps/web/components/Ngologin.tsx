@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import {WEB_URL} from "../public/constants"
+
+const Web_url=WEB_URL
+
 
 const Ngologin: React.FC = () => {
   const [email, setemail] = useState<string>("");
@@ -13,7 +17,7 @@ const Ngologin: React.FC = () => {
       password: password
     };
     try {
-      const response = await axios.post("http://localhost:3000/api/v1/testing/ngo/login",sendData);
+      const response = await axios.post(`${Web_url}/ngo/login`,sendData);
 
       const token = response.headers['authorization'];
 

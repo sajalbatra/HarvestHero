@@ -40,9 +40,8 @@ const NgoSchema = z.object({
   
 });
 
-
 export const Ngo_signup = async (req, res) => {
-  console.log(req.body)
+  console.log("jdjdj")
   const result = NgoSchema.safeParse(req.body);
 
   if (!result.success) {

@@ -15,6 +15,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "components/Ngosignup.jsx", "components/Donorsignup.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -197,9 +197,9 @@ export const verify_otp = async (req, res) => {
     };
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
-    res.setHeader('token', token);
+    res.setHeader('Authorization', 'Bearer ' + token);
     console.log(token)
-    return res.status(201).json(newDonor);
+    return res.status(201).json({ token, newDonor });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
@@ -248,9 +248,9 @@ export const donor_login = async (req, res) => {
 
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
 
-    res.setHeader('token', token);
+    res.setHeader('Authorization', 'Bearer ' + token);
     console.log(token)
-    res.status(200).json(existingDonor);
+    return res.status(201).json({ token, existingDonor });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: 'Internal server error' });

@@ -1,8 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
-const Web_Url = "http://localhost:3000/api/v1/testing";
+import {WEB_URL} from "../public/constants"
+
+const Web_url=WEB_URL
 
 const Ngosignup = () => {
+    // State variables to hold form data
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,50 +21,45 @@ const Ngosignup = () => {
     const [type, setType] = useState("NON_PROFIT");
     const [website, setWebsite] = useState("");
     const [requirement, setRequirement] = useState("");
-    const [logo, setLogo] = useState<File | null>(null);
-    const [legalDoc, setLegalDoc] = useState<File | null>(null);
+    const [logo, setLogo] = useState(null);
+    const [legalDoc, setLegalDoc] = useState(null);
 
-    const handleNGOSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleNGOSignUp = async (event) => {
         event.preventDefault();
-
-        const signUpData = {
-            name: name,
-            email: email,
-            phoneNumber: phoneNumber,
-            password: password,
-            address: {
-              streetAddress: streetAddress,
-              city: city,
-              state: state,
-              postalCode: postalCode,
-              country: country
-            },
-            affiliation: affiliation,
-            donationType: donationType.split(",").map(type => type.trim()),
-            ngoProfile: {
-              mission: mission,
-              type: type,
-              website: website,
-              requirement: requirement
-            },
-            logo: logo,       
-            legalDoc: legalDoc 
-          };
-        //   if (logo) {
-        //     signUpData.logo=logo;
-        //   }
-        //   if (legalDoc) {
-        //     signUpData.legalDoc=legalDoc;
-        //   }
-  
+    const sendData = new FormData();
+    sendData.append("name", name);
+    sendData.append("email", email);
+    sendData.append("phoneNumber", phoneNumber);
+    sendData.append("password", password);
+    sendData.append("address.streetAddress", streetAddress);
+    sendData.append("address.city", city);
+    sendData.append("address.state", state);
+    sendData.append("address.postalCode", postalCode);
+    sendData.append("address.country", country);
+    sendData.append("affiliation", affiliation);
+    sendData.append("donationType", donationType);
+    sendData.append("ngoProfile.mission", mission);
+    sendData.append("ngoProfile.type", type);
+    sendData.append("ngoProfile.website", website);
+    sendData.append("ngoProfile.requirement", requirement);
+    sendData.append("type", type);
+    sendData.append("logo", logo); 
+    sendData.append("legalDoc", legalDoc); 
         try {
-            console.log(signUpData)
-            const response = await axios.post("http://localhost:3000/api/v1/testing/ngo/signup", signUpData);
+            const response = await axios.post(`${Web_url}/ngo/signup`, sendData)
             console.log("NGO Sign Up successful:", response.data);
         } catch (error) {
-            console.error("NGO Sign Up failed:", error);
+            if (error.response) {
+                console.error('Response error:', error.response.data);
+              } else if (error.request) {
+                console.error('Request error:', error.request);
+              } else {
+                console.error('Error:', error.message);
+              }
+              throw error;
         }
     };
+
     return (
         <div className="flex items-center justify-center bg-gray-100">
             <form onSubmit={handleNGOSignUp} className="max-w-md px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
@@ -235,20 +233,16 @@ const Ngosignup = () => {
                         required
                     />
                 </div>
-                <div className="mb-4">
-                    <label htmlFor="ngo-logo" className="block mb-2 text-sm font-bold text-gray-700">
-                        NGO Logo:
-                    </label>
-                    <input
-                        id="ngo-logo"
-                        name="logo"
-                        type="file"
-                        accept="image/png, image/jpg, image/jpeg"
-                        onChange={(e) => setLogo(e.target.files && e.target.files[0] ? e.target.files[0] : null)}
-                        className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
+                <input
+                    id="ngo-logo"
+                    name="logo"
+                    type="file"
+                    accept="image/png, image/jpg, image/jpeg"
+                    onChange={(e) => setLogo(e.target.files && e.target.files[0])}
+                    className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    required
+                />
+
                 <div className="mb-4">
                     <label htmlFor="ngo-type" className="block mb-2 text-sm font-bold text-gray-700">
                         NGO Type:
@@ -270,19 +264,15 @@ const Ngosignup = () => {
                         <option value="ENVIRONMENTAL">Environmental</option>
                     </select>
                 </div>
-                <div className="mb-4">
-                    <label htmlFor="ngo-legalDoc" className="block mb-2 text-sm font-bold text-gray-700">
-                        Legal Document:
-                    </label>
-                    <input
-                        id="ngo-legalDoc"
-                        name="legalDoc"
-                        type="file"
-                        onChange={(e) => setLegalDoc(e.target.files && e.target.files[0] ? e.target.files[0] : null)}
-                        className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                        required
-                    />
-                </div>
+                <input
+                    id="ngo-legalDoc"
+                    name="legalDoc"
+                    type="file"
+                    onChange={(e) => setLegalDoc(e.target.files && e.target.files[0])}
+                    className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                    required
+/>
+
                 <div className="mb-4">
                     <label htmlFor="ngo-website" className="block mb-2 text-sm font-bold text-gray-700">
                         Website:

@@ -9,9 +9,8 @@ import cors from "cors"
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: "*"
-}));
+app.use(cors()); // This allows all origins, adjust as per your requirements
+
 // Routes
 app.use("/api/v1/testing/donor", allrouter.Donorrouter); // Mount your router at the specified path
 app.use("/api/v1/testing/ngo", allrouter.Ngorouter); // Mount your router at the specified path
