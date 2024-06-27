@@ -32,11 +32,69 @@ The main purpose of HarvestHero is to streamline the donation process, making it
 
 4. **Track Impact:** Monitor the impact of donations through real-time updates and reports.
 
+## Getting Started
 
+### Prerequisites
+- [Node.js](https://nodejs.org/) (version 12 or above)
+- [npm](https://www.npmjs.com/) (version 6 or above)
+
+### Installation
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/sajalbatra/HarvestHero
+    cd HarvestHero
+    ```
+
+2. **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3. **Start the development server:**
+    ```bash
+    turbo dev
+    ```
+
+    The application will be available at `http://localhost:3000`.
+
+### Deployment
+To deploy the application, you can use platforms like [Heroku](https://www.heroku.com/), [Vercel](https://vercel.com/), or any cloud provider of your choice.
+
+## Contributing
+We welcome contributions from the community! If you'd like to contribute, please follow these steps:
+
+1. **Fork the repository:**
+    Click the "Fork" button at the top right of this page to create your own copy of the repository.
+
+2. **Create a branch:**
+    ```bash
+    git checkout -b feature-branch
+    ```
+
+3. **Make your changes:**
+    Implement your changes in the codebase.
+
+4. **Commit your changes:**
+    ```bash
+    git commit -m "Description of the changes"
+    ```
+
+5. **Push to the branch:**
+    ```bash
+    git push origin feature-branch
+    ```
+
+6. **Create a pull request:**
+    Go to the original repository and click the "New Pull Request" button to submit your changes for review.
 
 ## Contributors
 - [Sajal Batra](https://github.com/sajalbatra)
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
- 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+<!-- ## Contact
+For any questions or suggestions, please reach out to us at [contact@harvesthero.org](mailto:contact@harvesthero.org). -->
+
+## Acknowledgments
+We thank all our contributors and supporters who help make HarvestHero a success. Your efforts are greatly appreciated!

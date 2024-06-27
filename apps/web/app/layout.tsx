@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Bitter } from "next/font/google";
-
+import ClientRootLayout from "./ClientRootLayout";
 const inter = Inter({ subsets: ["latin"] });
 const bitter = Bitter({ subsets: ["latin"] });
 
@@ -18,7 +18,11 @@ export default function RootLayout({
 }): JSX.Element {
   return (
     <html lang="en">
-      <body className={bitter.className}>{children}</body>
+      <body className={bitter.className}>
+        <ClientRootLayout>
+        {children}
+        </ClientRootLayout>
+      </body>
     </html>
   );
 }

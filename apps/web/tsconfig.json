@@ -15,6 +15,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "components/Ngosignup.jsx", "components/Donorsignup.jsx"  ],
+, "components/Ngosignup.jsx", "components/Donorsignup.jsx", "Recoil/Atoms/themechange.js"  ],
   "exclude": ["node_modules"]
 }

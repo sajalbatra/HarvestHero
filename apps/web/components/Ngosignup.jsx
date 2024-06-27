@@ -55,7 +55,9 @@ const Ngosignup = () => {
             setTimeout(()=>{
             router.push(`/verifyotp/ngo?email=${email}`)
             },3000)
-        } catch (error) {            
+            console.log(response)         
+        } catch (error) {   
+            //console.log(error)         
             notifyError("Error in sending OTP")            
         }
 

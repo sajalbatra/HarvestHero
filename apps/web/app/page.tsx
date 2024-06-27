@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-
+import HomePage from "../components/HomePage/HomePage"
 import LandingPage from "../components/LandingPage"
 const page = () => {
   const [isloggedin, setIsloggedin] = useState(false)
@@ -20,7 +20,7 @@ const page = () => {
       {
         isloggedin ? (
           <div>
-            User is signed in
+            <HomePage/>
           </div>
         )
           :
