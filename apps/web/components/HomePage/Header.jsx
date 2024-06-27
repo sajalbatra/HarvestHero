@@ -52,6 +52,9 @@ const Header = () => {
 const DialogBox = () => {
     const deletetoken = () => {
         localStorage.removeItem('Authorization');
+        setTimeout(()=>{
+            window.location.reload()
+        },1000)
     };
 
     const tokenString = localStorage.getItem('Authorization').split(" ")[1] || "";
@@ -59,15 +62,15 @@ const DialogBox = () => {
     const name = token.name;
     const email = token.email;
     const role = token.role;
-
+    
     return (
-        <div className='fixed p-4 border-2 rounded-md shadow-lg bg-surface dark:bg-dark-surface border-primary dark:border-dark-primary top-10 right-2 animate-fade-in-down'>
+        <div className='fixed z-10 p-4 border-2 rounded-md shadow-lg bg-surface dark:bg-dark-surface border-primary dark:border-dark-primary top-10 right-2 animate-fade-in-down'>
             <p className='text-primary dark:text-dark-primary'><strong>Name:</strong> {name}</p>
             <p className='text-primary dark:text-dark-primary'><strong>Email:</strong> {email}</p>
             <p className='text-primary dark:text-dark-primary'><strong>Role:</strong> {role === 'USER' ? 'Donor' : 'Ngo'}</p>
             <p className='cursor-pointer text-primary dark:text-dark-primary hover:text-primary-variant dark:hover:text-dark-primary-variant'><strong>More Information?</strong></p>
             <p className='flex items-center justify-center text-2xl cursor-pointer text-primary dark:text-dark-primary hover:text-primary-variant dark:hover:text-dark-primary-variant'>
-                <IoIosLogOut onClick={deletetoken} />
+                <IoIosLogOut onClick={deletetoken}  />
             </p>
         </div>
     );

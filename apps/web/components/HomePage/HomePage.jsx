@@ -1,13 +1,10 @@
-
+"use client";
 import Header from "./Header";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Card from "./Card";
-// Enum values
-const Organisation = [
-  "HOSPITAL",
-  "SCHOOL", "CHURCH", "NON_PROFIT_ORG", "OTHER"
-];
+import AllNgo from "../../app/ngo/Allngos";
 
+// Enum values
 const DonationType = [
   "FOOD", "CLOTHES", "MONETARY", "BOOKS", "TOYS",
   "MEDICAL_SUPPLIES", "TECHNOLOGY", "OTHERS"
@@ -19,9 +16,22 @@ const NGOType = [
 ];
 
 const HomePage = () => {
-  const [selectedOrganisation, setSelectedOrganisation] = useState("");
+  const Allngodata = AllNgo();
   const [selectedDonationType, setSelectedDonationType] = useState("");
   const [selectedNGOType, setSelectedNGOType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [fetchedNgoData, setFetchedNgoData] = useState(Allngodata);
+
+  useEffect(() => {
+    const filteredData = Allngodata.filter(ngo => {
+      const donationTypeMatch = selectedDonationType === "" || ngo.donationType.includes(selectedDonationType);
+      const ngoTypeMatch = selectedNGOType === "" || ngo.ngoProfile.type === selectedNGOType;
+      const searchQueryMatch = ngo.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return searchQueryMatch && donationTypeMatch && ngoTypeMatch;
+    });
+
+    setFetchedNgoData(filteredData);
+  }, [selectedDonationType, selectedNGOType, searchQuery, Allngodata]);
 
   return (
     <div className="min-h-screen dark:bg-black dark:text-white">
@@ -48,28 +58,18 @@ const HomePage = () => {
 
       <div className="flex items-start justify-center mb-10">
         <input
+          name="search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           type="search"
           placeholder="Enter the NGO name..."
           className="w-3/4 h-12 px-5 transition duration-300 border rounded-full shadow-md max-w-3/4 dark:text-black focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        <button className="p-3 ml-2 text-white transition duration-300 rounded-md shadow-md bg-primary hover:bg-primary-dark">
-          Search
-        </button>
       </div>
 
       <div className="flex flex-col mb-10">
         <h1 className="mb-6 text-2xl text-center">Filters</h1>
         <div className="flex items-center justify-center gap-10">
-          <select
-            className="p-3 text-lg transition duration-300 bg-white border rounded-md shadow-md dark:bg-dark-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
-            value={selectedOrganisation}
-            onChange={(e) => setSelectedOrganisation(e.target.value)}
-          >
-            <option value="">Select Organisation</option>
-            {Organisation.map((org, index) => (
-              <option key={index} value={org}>{org}</option>
-            ))}
-          </select>
           <select
             className="p-3 text-lg transition duration-300 bg-white border rounded-md shadow-md dark:bg-dark-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             value={selectedDonationType}
@@ -92,11 +92,9 @@ const HomePage = () => {
           </select>
         </div>
         <div className="flex flex-wrap items-center justify-center mt-10">
-        <Card name="Helping Hands" mission="Providing food and shelter to the homeless." />
-      <Card name="EduForAll" mission="Promoting education for underprivileged children." />
-      <Card name="Health First" mission="Ensuring healthcare access to remote areas." />
-      <Card name="Green Earth" mission="Protecting the environment through conservation efforts." />
-    
+          {fetchedNgoData.map((ngo, index) => (
+            <Card key={index} name={ngo.name} mission={ngo.ngoProfile.mission} />
+          ))}
         </div>
       </div>
     </div>

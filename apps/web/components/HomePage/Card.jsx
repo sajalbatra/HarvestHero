@@ -1,9 +1,12 @@
 import React from 'react';
-//import { useRouter } from 'next/router';
+import Link from 'next/link'
 
 const Card = ({ name, mission }) => {
   //const router = useRouter();
   console.log('Card component props:', { name, mission });
+  // const handleClick = () => {
+  //   router.push(`/ngo/${name}`);
+  // };
 
   return (
     <div className="w-[20%] m-4 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 dark:text-white">
@@ -12,12 +15,13 @@ const Card = ({ name, mission }) => {
         <p className="text-base text-gray-700 dark:text-gray-300">{mission}</p>
       </div>
       <div className="px-6 pt-4 pb-2">
+        <Link href={`/ngo/${name}`}>
         <button
-            onClick={() => window.location.href = `/ngo/${name}`}
             className="px-4 py-2 font-bold text-white transition duration-300 rounded-full bg-primary hover:bg-primary-dark"
         >
           Donate Now
         </button>
+        </Link>
       </div>
     </div>
   );

@@ -259,3 +259,23 @@ export const change_password = async (req, res) => {
     res.status(500).send({"msg": "Internal server error"});
   }
 };
+
+export const getNgo = async (req, res) => {
+  try {
+    const allNgos = await prisma.ngo.findMany({
+      include: {
+        address: true, // Include related address details
+        ngoProfile: true // Include related NGOProfile details
+      }
+    });
+    
+    if (allNgos.length === 0) {
+      return res.send("No NGOs found");
+    }
+    //console.log(allNgos)
+    return res.json(allNgos);
+  } catch (error) {
+    console.error("Error fetching NGOs:", error);
+    return res.status(500).send("Error fetching NGOs");
+  }
+};
