@@ -199,6 +199,7 @@ export const Ngo_login = async (req, res) => {
     
     const tokenPayload = {
       id: existingNgo.id,
+      name:existingNgo.name,
       email: existingNgo.email,
       role: existingNgo.role,
     };

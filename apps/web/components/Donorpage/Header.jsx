@@ -14,14 +14,11 @@ const Header = () => {
     useEffect(() => {
         const storedTheme = localStorage.getItem('themePreference') || 'light';
         setDarkMode(storedTheme);
-        document.documentElement.classList.add(storedTheme);
     }, [setDarkMode]);
 
     const toggleDarkMode = () => {
         const newMode = darkMode === 'light' ? 'dark' : 'light';
         setDarkMode(newMode);
-        document.documentElement.classList.remove(darkMode);
-        document.documentElement.classList.add(newMode);
         localStorage.setItem('themePreference', newMode);
     };
 
@@ -31,7 +28,7 @@ const Header = () => {
 
     return (
         <>
-            <div className="flex items-center justify-between mx-4 text-2xl">
+            <div className="flex items-center justify-between px-4 text-2xl dark:bg-dark-background dark:text-white">
                 <div className="title">
                     <h1>HarvestHero</h1>
                 </div>

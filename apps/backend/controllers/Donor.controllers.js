@@ -182,6 +182,7 @@ export const donor_login = async (req, res) => {
     
     const tokenPayload = {
       id: existingDonor.id,
+      name:existingDonor.name,
       email: existingDonor.email,
       role: existingDonor.role,
     };
