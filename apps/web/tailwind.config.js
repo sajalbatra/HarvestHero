@@ -45,9 +45,11 @@ module.exports = {
     backgroundImage: {
       'landingpagecardbg': 'linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0))',
     },
-
+    screens: {
+      'mobile': {'min': '0px', 'max': '680px'},
+      'lg-device': {'min': '681px'},
     }
   },
-  
+},
   plugins: [],
 }

@@ -3,7 +3,8 @@ import Header from "./Header";
 import { useState, useEffect } from 'react';
 import Card from "./Card";
 import AllNgo from "../../app/ngo/Allngos";
-
+import Hero from "./Hero"
+import Footer from "../Footer";
 // Enum values
 const DonationType = [
   "FOOD", "CLOTHES", "MONETARY", "BOOKS", "TOYS",
@@ -36,23 +37,7 @@ const HomePage = () => {
   return (
     <div className="min-h-screen dark:bg-black dark:text-white">
       <Header />
-
-      <div className="w-full bg-secondary p-[10%] dark:bg-dark-primary shadow-lg">
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-3xl text-center max-w-[1/6] drop-shadow-md mb-6">
-            <span className="text-primary dark:text-black">Happiness </span>
-            comes from your action.
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-10 -mb-10">
-            <button className="p-3 text-xl font-semibold text-white transition duration-300 border rounded-full shadow-md border-1 bg-error dark:bg-dark-error hover:bg-error-dark dark:hover:bg-dark-error-dark">
-              Donate Now
-            </button>
-            <button className="p-3 text-xl font-semibold text-white transition duration-300 border rounded-full shadow-md border-1 bg-error dark:bg-dark-error hover:bg-error-dark dark:hover:bg-dark-error-dark">
-              Watch Video
-            </button>
-          </div>
-        </div>
-      </div>
+      <Hero />
 
       <h1 className="m-10 text-3xl text-center drop-shadow-md">Open Donations</h1>
 
@@ -69,9 +54,9 @@ const HomePage = () => {
 
       <div className="flex flex-col mb-10">
         <h1 className="mb-6 text-2xl text-center">Filters</h1>
-        <div className="flex items-center justify-center gap-10">
+        <div className="flex items-center justify-center gap-10 text-lg mobile:gap-1 mobile:text-xs">
           <select
-            className="p-3 text-lg transition duration-300 bg-white border rounded-md shadow-md dark:bg-dark-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="p-3 transition duration-300 bg-white border rounded-md shadow-md mobile:p-1 dark:bg-[#3700B3] dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             value={selectedDonationType}
             onChange={(e) => setSelectedDonationType(e.target.value)}
           >
@@ -81,7 +66,7 @@ const HomePage = () => {
             ))}
           </select>
           <select
-            className="p-3 text-lg transition duration-300 bg-white border rounded-md shadow-md dark:bg-dark-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
+            className="p-3 transition duration-300 bg-white border rounded-md shadow-md mobile:p-1 dark:bg-[#3700B3] dark:text-white focus:outline-none focus:ring-2 focus:ring-primary"
             value={selectedNGOType}
             onChange={(e) => setSelectedNGOType(e.target.value)}
           >
@@ -91,12 +76,13 @@ const HomePage = () => {
             ))}
           </select>
         </div>
-        <div className="flex flex-wrap items-center justify-center mt-10">
+        <div className="flex items-center justify-center mt-10 mobile:grid mobile:grid-col-2 ">
           {fetchedNgoData.map((ngo, index) => (
             <Card key={index} name={ngo.name} mission={ngo.ngoProfile.mission} />
           ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

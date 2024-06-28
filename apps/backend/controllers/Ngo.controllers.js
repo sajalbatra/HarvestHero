@@ -9,6 +9,8 @@ const redis_url=process.env.Redis_url
 const client = new Redis(redis_url);
 const your_secret_key=process.env.Secret_Key
 // import {handleFileUpload} from "../utils/fileupload.js"
+import updateRedisCache from '../middlewares/updateredis.ngo.js';
+
 const prisma = new PrismaClient();
 
 const addressSchema = z.object({
@@ -41,7 +43,6 @@ const NgoSchema = z.object({
 });
 
 export const Ngo_signup = async (req, res) => {
-  console.log("jdjdj")
   const result = NgoSchema.safeParse(req.body);
 
   if (!result.success) {
@@ -155,7 +156,7 @@ export const verify_otp = async (req, res) => {
       role: newNgo.role,
     };
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
-
+    await updateRedisCache()
     res.setHeader('Authorization', 'Bearer ' + token);
     //console.log(token)
     return res.status(201).json({token,newNgo});
@@ -245,15 +246,6 @@ export const change_password = async (req, res) => {
     if (!find_user) {
       return res.status(404).send({"msg": "The user is not found"});
     }
-    const jwtpayload={
-      email:email,
-      password:hashedPassword,
-      role:token_verification.role
-
-    }
-    const token = jwt.sign(jwtpayload, your_secret_key, { expiresIn: '1h' });
-    res.setHeader('Authorization', 'Bearer ' + token);
-    res.status(201).json({token});
     res.send({"msg": "The password successfully changed"});
   } catch (error) {
     console.error(error);
@@ -263,17 +255,27 @@ export const change_password = async (req, res) => {
 
 export const getNgo = async (req, res) => {
   try {
+    // const cachedNgos = JSON.parse(await client.get("ngo"));
+    
+    // if (cachedNgos) {
+    //   console.log("Fetching NGOs from Redis cache");
+    //   return res.json(cachedNgos);
+    // }
+
     const allNgos = await prisma.ngo.findMany({
       include: {
-        address: true, // Include related address details
-        ngoProfile: true // Include related NGOProfile details
+        address: true, 
+        ngoProfile: true 
       }
     });
     
     if (allNgos.length === 0) {
       return res.send("No NGOs found");
     }
-    //console.log(allNgos)
+
+    await client.set("ngo", JSON.stringify(allNgos), "EX", 86400);
+    //console.log("Setting NGOs in Redis cache");
+
     return res.json(allNgos);
   } catch (error) {
     console.error("Error fetching NGOs:", error);

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { sendOTP, verifyOTP } from './otp.controller.js';
 import 'dotenv/config';
 import Redis  from "ioredis";
-
+import updateRedisCachedonor from "../middlewares/updateredisdonor.js"
 const redis_url=process.env.Redis_url
 const client = new Redis(redis_url);
 const your_secret_key=process.env.Secret_Key
@@ -136,7 +136,7 @@ export const verify_otp = async (req, res) => {
       role: newDonor.role,
     };
     const token = jwt.sign(tokenPayload, your_secret_key, { expiresIn: '1h' });
-
+    updateRedisCachedonor()
     res.setHeader('Authorization', 'Bearer ' + token);
     console.log(token)
     return res.status(201).json({ token, newDonor });
@@ -227,15 +227,7 @@ export const change_password = async (req, res) => {
     if (!find_user) {
       return res.status(404).send({"msg": "The user is not found"});
     }
-    const jwtpayload={
-      email:email,
-      password:hashedPassword,
-      role:token_verification.role
-
-    }
-    const token = jwt.sign(jwtpayload, your_secret_key, { expiresIn: '1h' });
-    res.setHeader('Authorization', 'Bearer ' + token);
-    res.status(201).json({token});
+    //console.log("The password successfully changed")
     res.send({"msg": "The password successfully changed"});
   } catch (error) {
     console.error(error);
@@ -245,3 +237,31 @@ export const change_password = async (req, res) => {
 
 
 
+export const getdonor = async (req, res) => {
+  try {
+    const cachedNgos = JSON.parse(await client.get("donor"));
+    
+    if (cachedNgos) {
+      //console.log("Fetching Donors from Redis cache");
+      return res.json(cachedNgos);
+    }
+
+    const allDonors = await prisma.donor.findMany({
+      include: {
+        address: true, 
+      }
+    });
+    
+    if (allDonors.length === 0) {
+      return res.send("No Donors found");
+    }
+
+    await client.set("donor", JSON.stringify(allDonors), "EX", 86400);
+    //console.log("Setting NGOs in Redis cache");
+
+    return res.json(allDonors);
+  } catch (error) {
+    //console.error("Error fetching Donor's:", error);
+    return res.status(500).send("Error fetching Donor's");
+  }
+};

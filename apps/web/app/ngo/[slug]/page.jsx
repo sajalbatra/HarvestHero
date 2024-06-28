@@ -1,21 +1,33 @@
 "use client"
-import AllNgo from '../Allngos'; // Adjust import path as per your project structure
-
+import AllNgo from '../Allngos'; 
+import Header from '../../../components/Donorpage/Header';
+import { themeState } from '../../../Recoil/Atoms/themechange';
+import { useRecoilValue } from 'recoil';
+import { useState,useEffect } from 'react';
+import Footer from '../../../components/Footer';
 export default function NgoPage({ params }) {
-  const paramsSlug = params.slug; // Access the dynamic parameter from the route
-  const name = paramsSlug.replace(/%20/g, ' '); // Replace URL-encoded spaces with actual spaces
-  const ngos = AllNgo(); // Fetch all NGOs (returns the fetched data directly)
   
+  const paramsSlug = params.slug; 
+  const name = paramsSlug.replace(/%20/g, ' '); 
+  const ngos = AllNgo(); 
+  const [theme, setTheme] = useState("");
+  const recoilTheme = useRecoilValue(themeState);
+  useEffect(() => {
+    setTheme(recoilTheme);
+    //console.log(theme);
+  }, [recoilTheme]);
   const filteredNgo = ngos.filter(ngo => ngo.name === name);
 
   if (filteredNgo.length === 0) {
     return <div>NGO not found for {paramsSlug}</div>;
   }
-
+  
   const ngo = filteredNgo[0]; 
 
   return (
-    <div className="container py-4 mx-auto">
+    <div className={`${theme} dark:bg-dark-background dark:text-white`}>
+    <div className="py-4 mx-auto mobile:m-0">
+      <Header/>
     {/* Centered Logo */}
     <div className="flex justify-center mb-4">
       <img src={ngo.ngoProfile.logo} alt={`${ngo.name} Logo`} className="object-cover w-32 h-32 rounded-full" />
@@ -57,6 +69,9 @@ export default function NgoPage({ params }) {
          
       <p className="mb-1"><span className="font-semibold">Requirements:</span> {ngo.ngoProfile.requirement}</p>
     </div>
+  </div>
+ 
+  <Footer/>
   </div>
   );
 }

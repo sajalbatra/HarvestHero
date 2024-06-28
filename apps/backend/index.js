@@ -9,12 +9,12 @@ import cors from "cors"
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors()); // This allows all origins, adjust as per your requirements
+app.use(cors()); 
 
 // Routes
-app.use("/api/v1/testing/donor", allrouter.Donorrouter); // Mount your router at the specified path
-app.use("/api/v1/testing/ngo", allrouter.Ngorouter); // Mount your router at the specified path
-app.use("/api/v1/testing", allrouter.otprouter); // Mount your router at the specified path
+app.use("/api/v1/testing/donor", allrouter.Donorrouter); 
+app.use("/api/v1/testing/ngo", allrouter.Ngorouter); 
+app.use("/api/v1/testing", allrouter.otprouter); 
 
 // Error handling middleware (if needed)
 app.use((err, req, res, next) => {
@@ -28,13 +28,6 @@ const server = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Graceful shutdown
-// async function shutdown() {
-//   console.log('Shutting down server...');
-//   await prisma.$disconnect();
-//   server.close();
-//   process.exit(0);
-// }
 
 
 export default app;
