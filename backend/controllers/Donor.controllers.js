@@ -1,16 +1,13 @@
-import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendOTP, verifyOTP } from './otp.controller.js';
 import 'dotenv/config';
-import Redis  from "ioredis";
 import updateRedisCachedonor from "../middlewares/updateredisdonor.js"
-const redis_url=process.env.Redis_url
-const client = new Redis(redis_url);
+import client from '../utils/redisClient.js';
 const your_secret_key=process.env.Secret_Key
 
-const prisma = new PrismaClient();
+import prisma from '../utils/prismaclientstr.js';
 
 const addressSchema = z.object({
   streetAddress: z.string(),

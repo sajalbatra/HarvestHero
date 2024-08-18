@@ -1,8 +1,5 @@
-import Redis from "ioredis";
-import { PrismaClient } from '@prisma/client';
-const redis_url = process.env.REDIS_URL;
-const client = new Redis(redis_url);
-const prisma = new PrismaClient();
+import client from "../utils/redisClient.js";
+import prisma from '../utils/prismaclientstr.js';
 
 const updateRedisCache = async () => {
   try {

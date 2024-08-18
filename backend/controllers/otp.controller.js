@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
 import randomstring from 'randomstring';
 import sendEmail from '../utils/sendEmails.js';
 
-const prisma = new PrismaClient();
+import prisma from '../utils/prismaclientstr.js';
 
 function generateOTP() {
     return randomstring.generate({
