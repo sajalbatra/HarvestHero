@@ -1,18 +1,27 @@
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  //extends: ["@repo/eslint-config/next.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: "./tsconfig.json", // Make sure this path is correct
+    project: "./tsconfig.json", // Ensure this path is correct
+    tsconfigRootDir: __dirname // Ensure this points to the root directory
   },
-  ignorePatterns: ["postcss.config.js"],
+  extends: [
+    "next", // Next.js linting rules
+    "next/core-web-vitals", // Core Web Vitals rules for Next.js
+    "@typescript-eslint/recommended" // TypeScript linting rules
+  ],
+  ignorePatterns: [
+    "node_modules/", // Exclude the node_modules directory
+    "build/", // Exclude the build directory
+    "postcss.config.js" // Exclude the PostCSS config file
+  ],
   overrides: [
     {
-      files: ["*.js"],
-      excludedFiles: ["tailwind.config.js"],
+      files: ["*.js"], // Apply JavaScript-specific rules
+      excludedFiles: ["tailwind.config.js"], // Exclude specific files
       rules: {
-        // your JavaScript-specific rules
+        // JavaScript-specific rules here
       }
     }
   ]

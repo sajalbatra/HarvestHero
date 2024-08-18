@@ -1,12 +1,14 @@
 "use client"
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { WEB_URL } from "../../../public/constants";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 import { useRouter } from 'next/navigation'
 import { notifyError, notifySuccess } from '../../../services/Notification'
 import Notification from '../../../services/Notification'
-function Page() {
+
+
+function Verifyotpdonor() {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState(""); // State for success or failure message
   const searchParams = useSearchParams();
@@ -26,9 +28,9 @@ function Page() {
       notifySuccess("Sign Up successful")
       //console.log("Donor Sign Up successful:", newDonor);
       setMessage("Account created successfully!");
-      setTimeout(()=>{
+      setTimeout(() => {
         router.push("/")
-      },3000)
+      }, 3000)
     } catch (error) {
       //console.error("Verification failed:", error);
       notifyError("OTP verification failed")
@@ -80,4 +82,11 @@ function Page() {
   );
 }
 
-export default Page;
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Verifyotpdonor />
+    </Suspense>
+  );
+}

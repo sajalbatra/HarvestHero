@@ -33,6 +33,7 @@
     ]
   },
   "include": [
+    "app/**/*",
     "src",
     "tailwind.config.js",
     "postcss.config.js",
