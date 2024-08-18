@@ -37,6 +37,7 @@ The main purpose of HarvestHero is to streamline the donation process, making it
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (version 12 or above)
 - [npm](https://www.npmjs.com/) (version 6 or above)
+- [Docker](https://www.docker.com/) (for running PostgreSQL and Redis)
 
 ### Installation
 1. **Clone the repository:**
@@ -50,9 +51,46 @@ The main purpose of HarvestHero is to streamline the donation process, making it
     npm install
     ```
 
-3. **Start the development server:**
+3. **Setup Docker containers:**
+    To run PostgreSQL and Redis using Docker, follow these steps:
+
+    - **Create a `docker-compose.yml` file:**
+      ```yaml
+      version: '3.8'
+
+      services:
+        postgres:
+          image: postgres:13
+          container_name: postgres
+          environment:
+            POSTGRES_USER: your_postgres_user
+            POSTGRES_PASSWORD: your_postgres_password
+            POSTGRES_DB: your_database
+          ports:
+            - "5432:5432"
+          volumes:
+            - postgres_data:/var/lib/postgresql/data
+
+        redis:
+          image: redis:latest
+          container_name: redis
+          ports:
+            - "6379:6379"
+
+      volumes:
+        postgres_data:
+      ```
+
+    - **Start the Docker containers:**
+      ```bash
+      docker-compose up -d
+      ```
+
+    This will start PostgreSQL and Redis in the background, with PostgreSQL accessible on port `5432` and Redis on port `6379`.
+
+4. **Start the development server:**
     ```bash
-    turbo dev
+    npm run dev
     ```
 
     The application will be available at `http://localhost:3000`.
