@@ -76,7 +76,7 @@ const HomePage = () => {
             ))}
           </select>
         </div>
-        <div className="flex items-center justify-center mt-10 mobile:grid mobile:grid-col-2 ">
+        <div className="flex flex-wrap items-center justify-center mt-10 mobile:grid mobile:grid-col-2 ">
           {fetchedNgoData.map((ngo, index) => (
             <Card key={index} name={ngo.name} mission={ngo.ngoProfile.mission} />
           ))}

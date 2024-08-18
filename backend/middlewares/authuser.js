@@ -3,8 +3,12 @@ import jwt from 'jsonwebtoken';
 const secretKey = process.env.Secret_Key;
 
 export const verifyUser = (req, res, next) => {
+  let token
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const authtoken=req.headers.authorization
+    if(authtoken){
+      token = authtoken.split(' ')[1];
+    }
     if (!token) {
       return res.status(401).json({ message: 'Authorization header is missing or invalid' });
     }

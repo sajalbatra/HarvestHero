@@ -22,7 +22,6 @@ const AllDonors = () => {
 
     fetchData();
   }, []);
-  //console.log(donorData)
   return donorData; 
 };
 

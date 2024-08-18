@@ -52,7 +52,6 @@ const Donorsignup = () => {
       router.push(`/verifyotp/donor?email=${email}`)
       },3000)
   } catch (error) {
-      console.log(error)            
       notifyError("Error in sending OTP")            
   }
   };

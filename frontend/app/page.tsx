@@ -20,16 +20,13 @@ const page: React.FC = () => {
         const tokenString = authToken.split(" ")[1] || "";
         const token = jwtDecode<DecodedToken>(tokenString);
         if (token) {
-          console.log("User is signed in");
           setIsLoggedIn(true);
           setUserRole(token.role);
         }
       } catch (error) {
-        console.error("Error decoding token:", error);
         setIsLoggedIn(false);
       }
     } else {
-      console.log("User is not signed in");
       setIsLoggedIn(false);
     }
   }, []);

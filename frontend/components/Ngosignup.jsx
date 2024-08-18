@@ -47,7 +47,6 @@ const Ngosignup = () => {
         sendData.append("type", type);
         sendData.append("logo", logo);
         sendData.append("legaldoc", legalDoc);
-        console.log(sendData)
         try {
             const response = await axios.post(`${Web_url}/ngo/signup`, sendData)
             if(response.status==200){

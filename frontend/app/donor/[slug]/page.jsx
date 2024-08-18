@@ -16,7 +16,6 @@ export default function DonorPage({ params }) {
     const email = paramsSlug.split('&&')[1];
     const donors = AllDonors();
     const [password, setpassword] = useState("")
-    //console.log(donors)
     const changepassword = async (event) => {
         event.preventDefault()
         try {

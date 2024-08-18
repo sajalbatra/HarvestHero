@@ -3,7 +3,6 @@ import Link from 'next/link'
 
 const Card = ({ name, mission }) => {
   //const router = useRouter();
-  console.log('Card component props:', { name, mission });
   // const handleClick = () => {
   //   router.push(`/ngo/${name}`);
   // };
