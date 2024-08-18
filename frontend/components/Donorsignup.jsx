@@ -47,7 +47,6 @@ const Donorsignup = () => {
 
     try {
       const response = await axios.post(`${Web_url}/donor/signup`, formData)
-      //console.log("Donor Sign Up successful:", response.data);
       notifySuccess("OTP Send to Email")
       setTimeout(()=>{
       router.push(`/verifyotp/donor?email=${email}`)

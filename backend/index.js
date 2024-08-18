@@ -13,7 +13,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'https://harvestherosb.vercel.app', // Correct origin URL
 }));
- 
+// app.use(cors({
+//   origin:'*',
+// }));
 
 // Routes
 app.use("/api/v1/testing/donor", allrouter.Donorrouter); 

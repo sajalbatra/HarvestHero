@@ -5,9 +5,9 @@ import { WEB_URL } from "../public/constants"
 import { notifyError, notifySuccess } from '../services/Notification'
 import Notification from '../services/Notification'
 const Web_url = WEB_URL
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation'
 const Ngosignup = () => {
-    // State variables to hold form data
+    const router = useRouter()
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ const Ngosignup = () => {
     const [postalCode, setPostalCode] = useState("");
     const [country, setCountry] = useState("");
     const [affiliation, setAffiliation] = useState("");
-    const [donationType, setDonationType] = useState("");
+    const [donationType, setDonationType] = useState([]);
     const [mission, setMission] = useState("");
     const [type, setType] = useState("NON_PROFIT");
     const [website, setWebsite] = useState("");
@@ -27,44 +27,43 @@ const Ngosignup = () => {
     const [legalDoc, setLegalDoc] = useState(null);
 
     const handleNGOSignUp = async (event) => {
-        const router = useRouter()
         event.preventDefault();
         const sendData = new FormData();
         sendData.append("name", name);
         sendData.append("email", email);
         sendData.append("phoneNumber", phoneNumber);
         sendData.append("password", password);
-        sendData.append("address.streetAddress", streetAddress);
-        sendData.append("address.city", city);
-        sendData.append("address.state", state);
-        sendData.append("address.postalCode", postalCode);
-        sendData.append("address.country", country);
+        sendData.append("address[streetAddress]", streetAddress);
+        sendData.append("address[city]", city);
+        sendData.append("address[state]", state);
+        sendData.append("address[postalCode]", postalCode);
+        sendData.append("address[country]", country);
         sendData.append("affiliation", affiliation);
-        sendData.append("donationType", donationType);
-        sendData.append("ngoProfile.mission", mission);
-        sendData.append("ngoProfile.type", type);
-        sendData.append("ngoProfile.website", website);
-        sendData.append("ngoProfile.requirement", requirement);
+        donationType.forEach(type => sendData.append("donationType", type));
+        sendData.append("ngoProfile[mission]", mission);
+        sendData.append("ngoProfile[type]", type);
+        sendData.append("ngoProfile[website]", website);
+        sendData.append("ngoProfile[requirement]", requirement);
         sendData.append("type", type);
         sendData.append("logo", logo);
-        sendData.append("legalDoc", legalDoc);
+        sendData.append("legaldoc", legalDoc);
+        console.log(sendData)
         try {
             const response = await axios.post(`${Web_url}/ngo/signup`, sendData)
-            //console.log("NGO Sign Up successful:", response.data);
+            if(response.status==200){
             notifySuccess("OTP Send to Email")
             setTimeout(()=>{
             router.push(`/verifyotp/ngo?email=${email}`)
             },3000)
-            console.log(response)         
+            }
         } catch (error) {   
-            //console.log(error)         
             notifyError("Error in sending OTP")            
         }
 
     };
 
     return (
-        <div className="flex items-center justify-center bg-gray-100">
+        <div className="flex items-center justify-center w-full bg-gray-100">
             <Notification />
             <form onSubmit={handleNGOSignUp} className="max-w-md px-8 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
                 <div className="mb-4">
@@ -217,7 +216,7 @@ const Ngosignup = () => {
                         name="donationType"
                         type="text"
                         value={donationType}
-                        onChange={(e) => setDonationType(e.target.value)}
+                        onChange={(e) => setDonationType(e.target.value.split(","))}
                         className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                         required
                     />
@@ -237,6 +236,9 @@ const Ngosignup = () => {
                         required
                     />
                 </div>
+                <label htmlFor="ngo-logo" className="block mb-2 text-sm font-bold text-gray-700">
+                        Logo:
+                    </label>
                 <input
                     id="ngo-logo"
                     name="logo"
@@ -268,6 +270,9 @@ const Ngosignup = () => {
                         <option value="ENVIRONMENTAL">Environmental</option>
                     </select>
                 </div>
+                <label htmlFor="ngo-legalDoc" className="block mb-2 text-sm font-bold text-gray-700">
+                        Certificate:
+                    </label>
                 <input
                     id="ngo-legalDoc"
                     name="legalDoc"
