@@ -19,18 +19,49 @@ The main purpose of HarvestHero is to streamline the donation process, making it
   
 - **Donation Matching:** Algorithms match donors with relevant NGOs based on donation types and geographical preferences.
   
-- **Real-time Updates:** Notifications and updates on donation requests, distributions, and impact reports keep users informed.
-
 - **Secure Transactions:** Built-in security measures ensure safe and reliable donation transactions.
+
+## Tech Stack
+
+### Frontend (Web)
+- **Framework:** [Next.js](https://nextjs.org/) (v14.1.1)
+- **Language:** TypeScript
+- **UI & Styling:**
+  - Tailwind CSS
+  - Radix UI
+  - React Icons
+  - Lucide React
+  - Tailwind CSS Animate
+- **State Management:** Recoil
+- **Theming:** `next-themes`
+- **Notifications:** React Toastify
+- **Animations:** React Typed, React Fast Marquee
+- **PDF Support:** React PDF
+- **Utilities:** Axios, clsx, dotenv, sharp
+
+### Backend (API Server)
+- **Runtime:** Node.js with Express
+- **Language:** TypeScript
+- **ORM:** Prisma
+- **Authentication & Security:**
+  - JSON Web Tokens (JWT)
+  - bcryptjs for password hashing
+  - CORS for security
+- **Database:** PostgreSQL
+- **Caching:**
+  - Redis (via ioredis)
+- **File Uploads:** Multer
+- **Validation:** Zod
+- **Mailing:** Nodemailer
+- **Cloud Storage:** Azure Blob Storage
+- **Image Processing:** Sharp
+- **Environment Management:** dotenv
+- **Dev Tools:** ts-node, nodemon
 
 ## How to Use
 1. **Sign Up:** Create a donor or NGO profile to start donating or receiving donations.
-   
 2. **Explore Donations:** Browse through available donations or create a donation request specifying your organization's needs.
-   
 3. **Connect and Donate:** Connect with matching donors or NGOs and initiate donation transactions.
-
-4. **Track Impact:** Monitor the impact of donations through real-time updates and reports.
 
 ## Getting Started
 
@@ -86,8 +117,6 @@ The main purpose of HarvestHero is to streamline the donation process, making it
       docker-compose up -d
       ```
 
-    This will start PostgreSQL and Redis in the background, with PostgreSQL accessible on port `5432` and Redis on port `6379`.
-
 4. **Start the development server:**
     ```bash
     npm run dev
@@ -130,9 +159,6 @@ We welcome contributions from the community! If you'd like to contribute, please
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-<!-- ## Contact
-For any questions or suggestions, please reach out to us at [contact@harvesthero.org](mailto:contact@harvesthero.org). -->
 
 ## Acknowledgments
 We thank all our contributors and supporters who help make HarvestHero a success. Your efforts are greatly appreciated!
